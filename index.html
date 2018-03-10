@@ -343,17 +343,22 @@ function death(){
 
   if(y > canvas.height/2 - canvas.height/2.5){
 ctx.drawImage(deathText,20,100,deathText.width/1.15,deathText.height/1.15);
+
+
 document.addEventListener("click", function(){location.reload()})
   }
+  if(y > canvas.height/2 - 50){
+    ctx.font = "60px Comic Sans MS";
+    ctx.fillStyle = "white";
+    ctx.fillText("Score: " + Math.round(time/50), canvas.width/2 - 120,canvas.height/2);
+    console.log( )
+    if(localStorage.getItem("highScore") == null ||Math.round(time/50) >  parseFloat(localStorage.getItem("highScore")) ){
+    localStorage.setItem("highScore", Math.round(time/50).toString())
+    }
+    ctx.fillText("High Score: " + localStorage.getItem("highScore"),canvas.width/2 - 200,canvas.height/2 + 60);
 
-  ctx.font = "60px Comic Sans MS";
-  ctx.fillStyle = "white";
-  ctx.fillText("Score: " + Math.round(time/50), canvas.width/2 - 120,canvas.height/2);
-  console.log( )
-if(localStorage.getItem("highScore") == null ||Math.round(time/50) >  parseFloat(localStorage.getItem("highScore")) ){
-localStorage.setItem("highScore", Math.round(time/50).toString())
-}
-  ctx.fillText("High Score: " + localStorage.getItem("highScore"),canvas.width/2 - 200,canvas.height/2 + 60);
+  }
+
 
   ctx.drawImage(diving,x,y,160,224);
 
