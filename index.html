@@ -113,7 +113,7 @@ ctx.drawImage(char[this.frame],this.x,this.y,40.1,56.3)
   }
   fly(){
     fuelBuff++;
-    if(fuelBuff % 2 === 0){
+    if(fuelBuff % 3 != 0){
     fuel.fuel-=3;
   }
         player.jetpack =  -0.9;
