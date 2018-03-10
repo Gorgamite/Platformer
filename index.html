@@ -2,7 +2,10 @@
 
 <head>
     <meta charset="UTF-8">
+    <link rel="shortcut icon" href="favicon.ico" />
+    <title>Ocean Jetter</title>
     <style type="text/css">
+
         canvas {
             border: 3px solid #d3d3d3;
             position: absolute;
@@ -325,10 +328,10 @@ function ground(){
     ctx.drawImage(water,i,canvas.height-water.height/5,water.width/5,water.height/5)
   }
 }
-function timer(x){
+function timer(){
   ctx.font = "30px Comic Sans MS";
   ctx.fillStyle = "white";
-  ctx.fillText(Math.round(time/50), x, 30);
+  ctx.fillText(Math.round(time/50), canvas.width - 80, 30);
 }
 var x = (canvas.width/2) - 40;
 var y = - 56;
@@ -337,12 +340,13 @@ function death(){
   x++;
   ctx.drawImage(underwater,0,0,canvas.width,canvas.height);
 
+
   if(y > canvas.height/2 - canvas.height/2.5){
 ctx.drawImage(deathText,20,100,deathText.width/1.15,deathText.height/1.15);
 document.addEventListener("click", function(){location.reload()})
   }
-
   ctx.drawImage(diving,x,y,160,224);
+
 
 }
 var time = 0;
@@ -380,7 +384,7 @@ player.show();
 
 player.position();
 
-timer(canvas.width - 80);
+timer();
 
 
 }
