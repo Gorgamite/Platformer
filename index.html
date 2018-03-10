@@ -265,12 +265,8 @@ for(var i=0;i<platformCnt;i++){
 }
 
 var player = new Player();
-
-
 document.onkeydown = function(key){
-
   if(key.keyCode === 32&& fuel.hasFuel){
-
 player.fly();
 } else{
   player.jetpack = 0;
@@ -282,6 +278,23 @@ if(key.keyCode === 32){
   player.jetpack = 0;
     // player.frame = 3;
 }
+}
+
+document.onmousedown = function() {
+
+  if(fuel.hasFuel){
+
+player.fly();
+} else{
+  player.jetpack = 0;
+    player.frame = 2;
+}
+}
+document.onmouseup  = function(key){
+  console.log("322")
+  player.jetpack = 0;
+    // player.frame = 3;
+
 }
 
 
@@ -315,7 +328,7 @@ function death(){
 
   if(y > canvas.height/2 - canvas.height/2.5){
 ctx.drawImage(deathText,20,100,deathText.width/1.15,deathText.height/1.15);
-
+document.addEventListener("click", function(){location.reload()})
   }
 
   ctx.drawImage(diving,x,y,160,224);
