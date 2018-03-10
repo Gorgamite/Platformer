@@ -337,6 +337,10 @@ document.addEventListener("click", function(){location.reload()})
 var cnt = 0;
 var loop =   setInterval(draw,20);
 platforms[4].gas = true;
+platforms[4].x = 200;
+platforms[4].y = 400;
+platforms[4].w = 500;
+
 Platform.coords();
 function draw(){
   clear();
