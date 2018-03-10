@@ -112,16 +112,13 @@ ctx.drawImage(char[this.frame],this.x,this.y,40.1,56.3)
     this.y +=this.velocity;
   }
   fly(){
-    fuelBuff++;
-    if(fuelBuff % 3 != 0){
-    fuel.fuel-=3;
-  }
+
+
         player.jetpack =  -0.9;
 
   }
 
 }
-var fuelBuff = 0;
 class Platform{
   constructor(){
     gasChance++;
@@ -239,6 +236,7 @@ class Fuel{
   update(){
     if(this.fuel <= 0){
       this.hasFuel = false;
+      this.fuel = 0;
     } else{
       this.hasFuel = true;
     }
@@ -247,8 +245,11 @@ class Fuel{
     }
 
     if(player.jetpack == 0){
-      this.fuel+=0.3;
+      this.fuel+=0.5;
     }
+if(player.jetpack !=0){
+      fuel.fuel-=1.5;
+}
   }
 }
 var gasChance = 0;
@@ -265,8 +266,14 @@ for(var i=0;i<platformCnt;i++){
 }
 
 var player = new Player();
+var temp = 0;
 document.onkeydown = function(key){
   if(key.keyCode === 32&& fuel.hasFuel){
+if(temp == 0){
+fuel.fuel-=3
+    temp++;
+}
+
 player.fly();
 } else{
   player.jetpack = 0;
@@ -275,6 +282,7 @@ player.fly();
 }
 document.onkeyup = function(key){
 if(key.keyCode === 32){
+  temp = 0;
   player.jetpack = 0;
     // player.frame = 3;
 }
@@ -283,6 +291,7 @@ if(key.keyCode === 32){
 document.onmousedown = function() {
 
   if(fuel.hasFuel){
+    fuel.fuel-=5
 
 player.fly();
 } else{
@@ -316,8 +325,10 @@ function ground(){
     ctx.drawImage(water,i,canvas.height-water.height/5,water.width/5,water.height/5)
   }
 }
-function timer(){
-
+function timer(x){
+  ctx.font = "30px Comic Sans MS";
+  ctx.fillStyle = "white";
+  ctx.fillText(Math.round(time/50), x, 30);
 }
 var x = (canvas.width/2) - 40;
 var y = - 56;
@@ -334,6 +345,7 @@ document.addEventListener("click", function(){location.reload()})
   ctx.drawImage(diving,x,y,160,224);
 
 }
+var time = 0;
 var cnt = 0;
 var loop =   setInterval(draw,20);
 platforms[4].gas = true;
@@ -345,6 +357,8 @@ Platform.coords();
 function draw(){
   clear();
   ground();
+  time++;
+
 
   fuel.update();
 fuel.fuelBar();
@@ -365,6 +379,9 @@ if(platforms[i].x < - platforms[i].w){
 player.show();
 
 player.position();
+
+timer(canvas.width - 80);
+
 
 }
 
