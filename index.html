@@ -112,13 +112,16 @@ ctx.drawImage(char[this.frame],this.x,this.y,40.1,56.3)
     this.y +=this.velocity;
   }
   fly(){
+    fuelBuff++;
+    if(fuelBuff % 2 === 0){
     fuel.fuel-=3;
+  }
         player.jetpack =  -0.9;
 
   }
 
 }
-
+var fuelBuff = 0;
 class Platform{
   constructor(){
     gasChance++;
@@ -239,7 +242,7 @@ class Fuel{
     }
 
     if(player.jetpack == 0){
-      this.fuel+=0.5;
+      this.fuel+=0.2;
     }
   }
 }
