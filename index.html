@@ -80,7 +80,7 @@ class Player{
     this.r = 10;
 
     this.velocity = 1;
-    this.gravity =  0.55;
+    this.gravity =  0.6;
     this.jetpack = 0;
 this.flying = false;
 
@@ -126,7 +126,7 @@ ctx.drawImage(char[this.frame],this.x,this.y,40.1,56.3)
   fly(){
 if(fuel.fuel > 0){
 
-        player.jetpack =  -1;
+        player.jetpack =  -1.2;
 }
   }
 
@@ -135,15 +135,12 @@ class Platform{
   constructor(){
     gasChance++;
     this.type = Math.random() > 0.5 ? platform1 : platform2;
-    // if(Math.random() > 0.5){
-    //   this.type = platform1;
-    // } else{
-    //   this.type = platform2;
-    // }
+
 this.x  = Math.random() * (canvas.width * 3);
 this.y = (Math.random() *(canvas.height * (3/4)) + canvas.height/5);
  this.w = (Math.random() *450) + 150;
  this.h = 10;
+
 
   }
   collect(){
@@ -159,19 +156,24 @@ fuel.fuel += 75;
   }
 
 static coords(){
-//   for(var i=0;i<platformCnt;i++){
-//     for(var p = 0 ; p<platformCnt;p++){
-//       if(p!=i){
-//           if(platforms[i].x < platforms[p].x - platforms[i].w){
-// console.log("Save!");
-//             // platforms[i].x  = Math.random() * (canvas.width * 3);
-//             // platforms[i].y = (Math.random() *(canvas.height * (3/4)) + canvas.height/5);
-//            }
-// }
-//       }
-//     }
+  for(var i=0;i<platformCnt;i++){
+    for(var p = 0 ; p<platformCnt;p++){
+      if(p!=i){
+if(Math.max(platforms[p].x + (platforms[p].w/2), platforms[i].x + (platforms[i].w/2)) - Math.min(platforms[p].x + (platforms[p].w/2), platforms[i].x + (platforms[i].w/2)) < 250){
+i = 0;
+if(beginning){
+  platforms[p].x  = Math.random() * (canvas.width * 3);
+} else{
+  platforms[p].x = Math.random() * (canvas.width * 2) + canvas.width + platforms[p].w;
+}
+}
+}
+      }
+    }
 
 }
+
+
   offScreen(){
 gasChance++;
     this.x  = Math.random() * (canvas.width * 2) + canvas.width;
@@ -179,12 +181,12 @@ gasChance++;
  this.w = (Math.random() *450) + 150;
  if(gasChance >= num){
    this.gas = true;
-    num = Math.floor(Math.random() * 6) + 7;
+    num = Math.floor(Math.random() * 6) + 9;
 gasChance = 0;
 } else{
   this.gas = false;
 }
-
+Platform.coords();
   }
 
    ball(){
@@ -201,7 +203,7 @@ cnt+=1;
    player.gravity = 0;
       player.velocity = 0;
 } else{
-   player.gravity = 0.55;
+   player.gravity = 0.6;
 
 }
 
@@ -217,7 +219,7 @@ if(this.gas){
 }
   }
   update(){
-    this.x-=7;
+    this.x-=8;
   }
 }
 
@@ -264,7 +266,7 @@ if(player.jetpack !=0){
   }
 }
 var gasChance = 0;
-var num = Math.floor(Math.random() * 6) + 7;
+var num = Math.floor(Math.random() * 6) + 9;
 var fuel = new Fuel();
 var platformCnt = 7;
 var platforms = [];
@@ -299,7 +301,6 @@ if(key.keyCode === 32){
 }
 }
 // FIX THE FUEL GLITCH!!!!!***********************************************************
-// also hold down your mouse and hit the ceiling... see what happens. Fix that shit.
 // order this shit first...?
 document.onmousedown = function() {
 if(beginning){
@@ -374,7 +375,7 @@ document.addEventListener("click", function(){location.reload()})
   }
 
 
-  ctx.drawImage(diving,x,y,160,224);
+  ctx.drawImage(diving,x,y,157.5,158);
 
 
 }
@@ -385,7 +386,8 @@ platforms[4].gas = true;
 platforms[4].x = 200;
 platforms[4].y = 400;
 platforms[4].w = 500;
-// Platform.coords();
+Platform.coords();
+
 var beginning = true;
 var flash = 0;
 var instruction = setInterval(function(){
@@ -404,6 +406,8 @@ function draw(){
   clear();
   ground();
   time++;
+
+
 
 
   fuel.update();
