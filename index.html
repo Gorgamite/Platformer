@@ -9,7 +9,7 @@
         canvas {
             border: 3px solid #d3d3d3;
             position: absolute;
-            background-image: url("sky.jpg");
+            background-image: url("intro.png");
         }
     </style>
 </head>
@@ -31,6 +31,11 @@
 <img src = "deathText.png" id = "deathText"></img>
 <img src = "platform1.png" id = "platform1"></img>
 <img src = "platform2.png" id = "platform2"></img>
+
+<img src = "begin.png" id = "begin"></img>
+<img src = "intro.png" id = "intro"></img>
+
+
 
 
 
@@ -55,6 +60,8 @@ var underwater = document.getElementById("underwater")
 var deathText = document.getElementById("deathText")
 var platform1 = document.getElementById("platform1")
 var platform2 = document.getElementById("platform2")
+var begin = document.getElementById("begin");
+var intro = document.getElementById("intro");
 
 
 
@@ -73,8 +80,10 @@ class Player{
     this.r = 10;
 
     this.velocity = 1;
-    this.gravity =  0.5;
+    this.gravity =  0.55;
     this.jetpack = 0;
+this.flying = false;
+
   }
 
   position(){
@@ -115,10 +124,10 @@ ctx.drawImage(char[this.frame],this.x,this.y,40.1,56.3)
     this.y +=this.velocity;
   }
   fly(){
+if(fuel.fuel > 0){
 
-
-        player.jetpack =  -0.9;
-
+        player.jetpack =  -1;
+}
   }
 
 }
@@ -190,10 +199,9 @@ cnt+=1;
 
    player.y = this.y - 56.3;
    player.gravity = 0;
-   player.jetpack = 0;
       player.velocity = 0;
 } else{
-   player.gravity = 0.5;
+   player.gravity = 0.55;
 
 }
 
@@ -237,9 +245,9 @@ class Fuel{
 
   }
   update(){
-    if(this.fuel <= 0){
+    if(this.fuel < -20){
       this.hasFuel = false;
-      this.fuel = 0;
+      this.fuel = -20;
     } else{
       this.hasFuel = true;
     }
@@ -271,13 +279,12 @@ for(var i=0;i<platformCnt;i++){
 var player = new Player();
 var temp = 0;
 document.onkeydown = function(key){
-  if(key.keyCode === 32&& fuel.hasFuel){
+  if(key.keyCode === 32 && fuel.hasFuel && fuel.fuel >= 0){
 if(temp == 0){
 fuel.fuel-=3
     temp++;
 }
-
-player.fly();
+player.flying = true;
 } else{
   player.jetpack = 0;
     player.frame = 2;
@@ -285,26 +292,33 @@ player.fly();
 }
 document.onkeyup = function(key){
 if(key.keyCode === 32){
+  player.flying = false;
   temp = 0;
   player.jetpack = 0;
     // player.frame = 3;
 }
 }
-
+// FIX THE FUEL GLITCH!!!!!***********************************************************
+// also hold down your mouse and hit the ceiling... see what happens. Fix that shit.
+// order this shit first...?
 document.onmousedown = function() {
+if(beginning){
+  loop =   setInterval(draw,20);
+  beginning = false;
+  clearInterval(instruction)
+}
+  if(fuel.hasFuel && fuel.fuel >= 0){
+fuel.fuel-=3
 
-  if(fuel.hasFuel){
-    fuel.fuel-=5
-
-player.fly();
+player.flying = true;
 } else{
   player.jetpack = 0;
     player.frame = 2;
 }
 }
 document.onmouseup  = function(key){
-  console.log("322")
   player.jetpack = 0;
+  player.flying = false;
     // player.frame = 3;
 
 }
@@ -320,12 +334,12 @@ var water = document.getElementById("water");
 
 function ground(){
 
-  pos-=2
-  if(pos <=-water.width/5){
+  pos-=3
+  if(pos <=-water.width/2){
     pos = 0;
   }
-  for(var i=pos;i<canvas.width;i+=water.width/5){
-    ctx.drawImage(water,i,canvas.height-water.height/5,water.width/5,water.height/5)
+  for(var i=pos;i<canvas.width;i+=water.width/2){
+    ctx.drawImage(water,i,canvas.height-water.height/2,water.width/2 + 1,water.height/2)
   }
 }
 function timer(){
@@ -347,7 +361,7 @@ ctx.drawImage(deathText,20,100,deathText.width/1.15,deathText.height/1.15);
 
 document.addEventListener("click", function(){location.reload()})
   }
-  if(y > canvas.height/2 - 50){
+  if(y > canvas.height/2 - 120){
     ctx.font = "60px Comic Sans MS";
     ctx.fillStyle = "white";
     ctx.fillText("Score: " + Math.round(time/50), canvas.width/2 - 120,canvas.height/2);
@@ -366,13 +380,26 @@ document.addEventListener("click", function(){location.reload()})
 }
 var time = 0;
 var cnt = 0;
-var loop =   setInterval(draw,20);
+var loop;
 platforms[4].gas = true;
 platforms[4].x = 200;
 platforms[4].y = 400;
 platforms[4].w = 500;
+// Platform.coords();
+var beginning = true;
+var flash = 0;
+var instruction = setInterval(function(){
+ctx.drawImage(intro,0,0,canvas.width,canvas.height)
+flash++;
+if(flash % 2 == 1){
+  ctx.drawImage(begin,340,400,begin.width * 0.7, begin.height * 0.7);
+}
 
-Platform.coords();
+},500)
+
+
+
+
 function draw(){
   clear();
   ground();
@@ -383,6 +410,9 @@ function draw(){
 fuel.fuelBar();
 player.edges();
 player.update();
+if(player.flying){
+  player.fly();
+}
 
 for(var i=0;i<platformCnt;i++){
   platforms[i].show();
