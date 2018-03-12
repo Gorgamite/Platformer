@@ -5,7 +5,6 @@
     <link rel="shortcut icon" href="favicon.ico" />
     <title>Ocean Jetter</title>
     <style type="text/css">
-
         canvas {
             border: 3px solid #d3d3d3;
             position: absolute;
@@ -50,7 +49,6 @@ var char = [];
 char[0] = document.getElementById("char0")
 char[1] = document.getElementById("char1")
 char[2] = document.getElementById("char2")
-// char[3] = document.getElementById("char3");
 var background = document.getElementById("background")
 var jetpack = document.getElementById("jetpack");
 var fire = document.getElementById("fire");
@@ -63,7 +61,20 @@ var platform2 = document.getElementById("platform2")
 var begin = document.getElementById("begin");
 var intro = document.getElementById("intro");
 
-
+var gasChance = 0;
+var num = Math.floor(Math.random() * 6) + 9;
+var platformCnt = 7;
+var platforms = [];
+var temp = 0;
+var pos = 0;
+var water = document.getElementById("water");
+var x = (canvas.width/2) - 40;
+var y = - 56;
+var time = 0;
+var cnt = 0;
+var loop;
+var beginning = true;
+var flash = 0;
 
 function createVector(x1,y1){
   this.x = x1;
@@ -113,7 +124,6 @@ this.flying = false;
     }
 ctx.drawImage(jetpack,this.x - this.r * 2 + 3,this.y,jetpack.width/8,jetpack.height/8);
 ctx.drawImage(char[this.frame],this.x,this.y,40.1,56.3)
-// ctx.drawImage(char[2],this.x,this.y,40.1,56.3)
 
 
 
@@ -125,23 +135,18 @@ ctx.drawImage(char[this.frame],this.x,this.y,40.1,56.3)
   }
   fly(){
 if(fuel.fuel > 0){
-
         player.jetpack =  -1.2;
 }
   }
-
 }
 class Platform{
   constructor(){
     gasChance++;
     this.type = Math.random() > 0.5 ? platform1 : platform2;
-
 this.x  = Math.random() * (canvas.width * 3);
 this.y = (Math.random() *(canvas.height * (3/4)) + canvas.height/5);
  this.w = (Math.random() *450) + 150;
  this.h = 10;
-
-
   }
   collect(){
 
@@ -204,15 +209,10 @@ cnt+=1;
       player.velocity = 0;
 } else{
    player.gravity = 0.6;
-
 }
-
    }
   show(){
     ctx.drawImage(this.type,this.x,this.y - 20,this.w,this.type.height/12);
-
-
-
 if(this.gas){
     ctx.drawImage(gas,this.x + (this.w/2)-(gas.width/30)/2,this.y-(gas.height/30) + 5,gas.width/30,gas.width/30)
 
@@ -222,7 +222,6 @@ if(this.gas){
     this.x-=9;
   }
 }
-
 
 class Fuel{
   constructor(){
@@ -267,21 +266,14 @@ if(player.jetpack !=0){
 }
   }
 }
-var gasChance = 0;
-var num = Math.floor(Math.random() * 6) + 9;
-var fuel = new Fuel();
-var platformCnt = 7;
-var platforms = [];
+
 for(var i=0;i<platformCnt;i++){
   platforms[i] = new Platform();
 }
 
-for(var i=0;i<platformCnt;i++){
-
-}
-
+var fuel = new Fuel();
 var player = new Player();
-var temp = 0;
+
 document.onkeydown = function(key){
   if(key.keyCode === 32 && fuel.hasFuel && fuel.fuel >= 0){
 if(temp == 0){
@@ -298,11 +290,8 @@ if(key.keyCode === 32){
   player.flying = false;
   temp = 0;
   player.jetpack = 0;
-    // player.frame = 3;
 }
 }
-// FIX THE FUEL GLITCH!!!!!***********************************************************
-// order this shit first...?
 document.onmousedown = function() {
 if(beginning){
   loop =   setInterval(draw,20);
@@ -321,18 +310,12 @@ player.flying = true;
 document.onmouseup  = function(key){
   player.jetpack = 0;
   player.flying = false;
-    // player.frame = 3;
 
 }
-
 
 function clear(){
 ctx.drawImage(background,0,0,canvas.width,canvas.height);
 }
-
-
-var pos = 0;
-var water = document.getElementById("water");
 
 function ground(){
 
@@ -349,8 +332,7 @@ function timer(){
   ctx.fillStyle = "white";
   ctx.fillText(Math.round(time/50), canvas.width - 80, 30);
 }
-var x = (canvas.width/2) - 40;
-var y = - 56;
+
 function death(){
   y+=3;
   x++;
@@ -374,23 +356,15 @@ document.addEventListener("click", function(){location.reload()})
     ctx.fillText("High Score: " + localStorage.getItem("highScore"),canvas.width/2 - 200,canvas.height/2 + 60);
 
   }
-
-
   ctx.drawImage(diving,x,y,157.5,158);
-
-
 }
-var time = 0;
-var cnt = 0;
-var loop;
+
 platforms[4].gas = true;
 platforms[4].x = 200;
 platforms[4].y = 400;
 platforms[4].w = 500;
 Platform.coords();
 
-var beginning = true;
-var flash = 0;
 var instruction = setInterval(function(){
 ctx.drawImage(intro,0,0,canvas.width,canvas.height)
 flash++;
@@ -400,16 +374,10 @@ if(flash % 2 == 1){
 
 },400)
 
-
-
-
 function draw(){
   clear();
   ground();
   time++;
-
-
-
 
   fuel.update();
 fuel.fuelBar();
@@ -431,14 +399,9 @@ if(platforms[i].x < - platforms[i].w){
 }
 }
 player.show();
-
 player.position();
-
 timer();
-
-
 }
-
 
 </script>
 </body>
