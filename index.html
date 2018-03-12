@@ -240,17 +240,19 @@ class Fuel{
     grd.addColorStop(0.67, "orange");
     grd.addColorStop(1, "green");
     ctx.fillStyle = grd;
+    if(this.fuel > 0){
     ctx.fillRect(400, 10, this.fuel, 20);
+  }
   ctx.rect(i,10,100,20);
   }
   ctx.stroke();
 
   }
   update(){
-    if(this.fuel < -20){
+    if(this.fuel < -10){
       this.hasFuel = false;
-      this.fuel = -20;
-    } else{
+      this.fuel = -10;
+    } else if (this.fuel > 0 ){
       this.hasFuel = true;
     }
     if(this.fuel > 400){
@@ -289,7 +291,6 @@ fuel.fuel-=3
 player.flying = true;
 } else{
   player.jetpack = 0;
-    player.frame = 2;
 }
 }
 document.onkeyup = function(key){
