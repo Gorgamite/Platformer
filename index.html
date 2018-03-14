@@ -164,7 +164,9 @@ static coords(){
   for(var i=0;i<platformCnt;i++){
     for(var p = 0 ; p<platformCnt;p++){
       if(p!=i){
-if(Math.max(platforms[p].x + (platforms[p].w/2), platforms[i].x + (platforms[i].w/2)) - Math.min(platforms[p].x + (platforms[p].w/2), platforms[i].x + (platforms[i].w/2)) < 250){
+if(platforms[p].x > canvas.width &&
+   Math.max(platforms[p].x + (platforms[p].w/2), platforms[i].x + (platforms[i].w/2)) - Math.min(platforms[p].x + (platforms[p].w/2), platforms[i].x + (platforms[i].w/2)) < 250&&
+   Math.abs(platforms[i].y - platforms[p].y) < 300){
 i = 0;
 if(beginning){
   platforms[p].x  = Math.random() * (canvas.width * 3);
@@ -192,6 +194,8 @@ gasChance = 0;
   this.gas = false;
 }
 Platform.coords();
+this.type = Math.random() > 0.5 ? platform1 : platform2;
+
   }
 
    ball(){
@@ -369,7 +373,7 @@ var instruction = setInterval(function(){
 ctx.drawImage(intro,0,0,canvas.width,canvas.height)
 flash++;
 if(flash % 2 == 1){
-  ctx.drawImage(begin,340,400,begin.width * 0.7, begin.height * 0.7);
+  ctx.drawImage(begin,canvas.width/3.65,canvas.height/1.51,begin.width * 0.7, begin.height * 0.7);
 }
 
 },400)
